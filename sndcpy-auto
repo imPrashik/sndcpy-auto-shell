@@ -7,38 +7,10 @@ VLC=${VLC:-/Applications/VLC.app/Contents/MacOS/VLC}
 SNDCPY_APK=${SNDCPY_APK:-"$(dirname "$0")"/sndcpy.apk}
 SNDCPY_PORT=${SNDCPY_PORT:-28200}
 
-# alias adbs="$ADB \$(/drives/d/tools/bin/not_exported/android-select-device.sh)"
-
-# ADBS="adb \${ADBS:-"$ADB $(dirname "$0")"/android-select-device.sh}"
-
-# # # # # # # # # # # # # # # ADBS=${ADBS:-"$(dirname "$0")"/android-select-device}
-
 ADBS=${ADBS:-"$(dirname "$0")"/android-select-device}
-
-# serial=
-# if [[ $# -ge 1 ]]
-# then
-#     serial="-s $1"
-#     echo "Waiting for device $1..."
-# else
-#     echo 'Waiting for device...'
-# fi
-
-# alias serial="$ADB $ADBS"
-
-# echo $adbs
-
-# serial=$adbs
 
 serial=$($ADBS)
 
-# serial = ${$serial}
-# sleep 5s
-
-# echo "$serial"
-
-
-# "$ADB" $serial wait-for-device
 "$ADB" $serial install -t -r -g "$SNDCPY_APK" ||
 {
     echo 'Uninstalling existing version first...'
@@ -50,85 +22,19 @@ serial=$($ADBS)
 "$ADB" $serial shell am start com.rom1v.sndcpy/.MainActivity
 sleep 1s
 
-# orientation=$($ADB $serial shell "dumpsys input | grep SurfaceOrientation | awk '{print $2}' | head -n 1")
-# orientation=$($ADB $serial shell dumpsys input | grep 'SurfaceOrientation' | awk '{ print $2 }')
-#echo "${z//      SurfaceOrientation: }"
-# orientation="${orientation//      SurfaceOrientation: }"
-#orientation="${$(adb shell "dumpsys input | grep SurfaceOrientation | awk '{print $2}' | head -n 1")//      SurfaceOrientation: }"
-
-#adb shell settings put system user_rotation 0
-
-# echo $orientation
-
-# if [[ ( "$orientation" -eq 0 ) || ( "$orientation" -eq 2 ) ]]
-# then
-#     echo "Landscape"
-#     sleep 2s
-#     adb $serial shell input tap 1650 900
-#     sleep 1s
-#     adb $serial shell input tap 800 1600
-# else
-#     echo "Portrait"
-#     sleep 2s
-#     adb $serial shell input tap 800 1600
-# fi
-
-# sleep 1s
-
-# $ADB $serial shell input keyevent 22
-# $ADB $serial shell input keyevent 22
-# $ADB $serial shell input keyevent 66
-
-
-
 activityName=$($ADB $serial shell dumpsys activity activities | grep mResumedActivity | cut -d . -f 5 | cut -d ' ' -f 1)
-
-# while [[ $activityName -eq "MediaProjectionPermissionActivity" ]]
-# do
-# echo "$activityName"
-# sleep 1s
-# $ADB $serial shell input keyevent 22
-# $ADB $serial shell input keyevent 22
-# # echo "media exist"
-# # echo "$ADB $serial shell dumpsys activity activities | grep mResumedActivity | cut -d . -f 5 | cut -d ' ' -f 1"
-# $ADB $serial shell input keyevent 66
-
-# activityName=$($ADB $serial shell dumpsys activity activities | grep mResumedActivity | cut -d . -f 5 | cut -d ' ' -f 1)
-# done
 
 while [[ $activityName -eq "MediaProjectionPermissionActivity" ]]
 do
-    # break
-
     if [ "$activityName" != "MediaProjectionPermissionActivity" ]
     then
         break
     fi
-
-    echo "$activityName"
-    # sleep 1s
     $ADB $serial shell input keyevent 22
     $ADB $serial shell input keyevent 22
-    # echo "media exist"
-    # echo "$ADB $serial shell dumpsys activity activities | grep mResumedActivity | cut -d . -f 5 | cut -d ' ' -f 1"
     $ADB $serial shell input keyevent 66
-
     activityName=$($ADB $serial shell dumpsys activity activities | grep mResumedActivity | cut -d . -f 5 | cut -d ' ' -f 1)
 done
-
-# echo "Press Start"
-# sleep 5s
-
-# echo "Press Enter once audio capture is authorized on the device to start playing..."
-# read dummy
-
-#adb shell input keyevent 25
-
-# echo "Do you want to mute that? [Y,n]"
-# read DO_THAT
-# if ["DO_THAT"="y"]; then
-#   do_that
-# fi
 
 $ADB $serial shell input keyevent 164
 
