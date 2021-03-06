@@ -1,4 +1,4 @@
-# sndcpy-auto shell
+# sndcpy-auto cast shell
 
 This is an forked copy of https://github.com/rom1v/sndcpy to include auto casting selection and shell input using `sndcpy-auto` shell script
 
