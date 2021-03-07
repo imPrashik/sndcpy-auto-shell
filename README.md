@@ -1,6 +1,9 @@
 # sndcpy-auto cast shell
 
-This is an forked copy of https://github.com/rom1v/sndcpy to include auto casting selection and shell input using `sndcpy-auto` shell script
+This is an forked copy of https://github.com/rom1v/sndcpy to include following:
+
+* Casting auto audio cast authorization in mobile with audio mute and shell input using `sndcpy-auto` shell script
+* Device Selection if multiple devices are connected
 
 The purpose is to enable [audio forwarding][issue14] while mirroring with
 [scrcpy]. However, it can be used independently.
